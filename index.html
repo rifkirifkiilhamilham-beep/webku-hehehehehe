@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif SSW Peternakan (Soal 1-269)</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-border: #22c55e;
+            --success-text: #15803d;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --danger-text: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 24px 16px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            background: var(--card-bg);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Banner Mode Review Salah */
+        .review-mode-banner {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #b45309;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-mode-banner.active {
+            display: flex;
+        }
+
+        .btn-exit-review {
+            background: #b45309;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-exit-review:hover {
+            background: #92400e;
+        }
+
+        /* Progress Bar & Stats */
+        .progress-section {
+            margin-bottom: 24px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 2px;
+        }
+
+        /* Card Soal */
+        .question-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .question-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: var(--primary-color);
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success-border) !important;
+            color: var(--success-text) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--danger-bg) !important;
+            border-color: var(--danger-border) !important;
+            color: var(--danger-text) !important;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            display: block;
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+        }
+
+        .feedback.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-border);
+        }
+
+        /* Navigasi dan Kontrol */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--primary-color);
+            color: white;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reset:hover:not(:disabled) {
+            background: #dc2626;
+        }
+
+        .btn-finish {
+            background: #22c55e;
+            color: white;
+            display: block;
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .btn-finish:hover:not(:disabled) {
+            background: #16a34a;
+        }
+
+        .btn-review-wrong {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-review-wrong:hover:not(:disabled) {
+            background: #d97706;
+        }
+
+        .bottom-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .jump-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .jump-input {
+            width: 70px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .jump-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Modal / Ringkasan Nilai Akhir */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .modal-score-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-stat-val {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .modal-stat-lbl {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+    
+        .user-identity-box {
+            background: #f1f5f9;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 600px) {
+            .user-identity-box {
+                grid-template-columns: 1fr;
+            }
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .input-group input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .sync-status {
+            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .sync-status.loading {
+            display: block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+        .sync-status.success {
+            display: block;
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+        }
+        .sync-status.error {
+            display: block;
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-border);
+        }
+    
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Latihan Soal SSW Peternakan</h1>
+        <p class="subtitle" id="total-subtitle">Kumpulan Soal ASAT Dokkai</p>
+    </header>
+
+    <!-- Input Identitas Peserta -->
+    <div class="user-identity-box">
+        <div class="input-group">
+            <label for="participant-name">Nama Lengkap Peserta *</label>
+            <input type="text" id="participant-name" placeholder="Contoh: Rifki Pratama" oninput="saveIdentity()">
+        </div>
+        <div class="input-group">
+            <label for="participant-batch">Kelas / Angkatan / Ket.</label>
+            <input type="text" id="participant-batch" placeholder="Contoh: Batch 5 / SSW Peternakan" oninput="saveIdentity()">
+        </div>
+    </div>
+    
+
+    <!-- Banner Mode Review Salah -->
+    <div class="review-mode-banner" id="review-banner">
+        <span>⚠️ Mode Tinjau: Menampilkan soal yang salah / belum dijawab</span>
+        <button class="btn-exit-review" onclick="exitReviewMode()">Keluar Mode Review</button>
+    </div>
+
+    <!-- Bar Persentase Pengerjaan -->
+    <div class="progress-section">
+        <div class="progress-info">
+            <span id="progress-label">Progres Pengerjaan</span>
+            <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- Statistik Utama -->
+    <div class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-value"><span id="current-no">1</span>/<span id="total-count">0</span></span>
+            <span class="stat-label">Nomor Soal</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="answered-count">0</span>
+            <span class="stat-label">Terjawab</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="score">0</span>
+            <span class="stat-label">Skor Benar</span>
+        </div>
+    </div>
+
+    <!-- Tombol Selesai & Lihat Nilai -->
+    <button class="btn btn-finish" id="finish-quiz-btn" onclick="showFinalScoreModal()">🎉 Selesai, Lihat Nilai & Kirim ke Spreadsheet</button>
+
+    <!-- Card Soal -->
+    <div class="question-card">
+        <div class="question-title" id="question-text">Memuat soal...</div>
+        <div class="options-container" id="options-box"></div>
+        <div class="feedback" id="feedback-box"></div>
+    </div>
+
+    <!-- Tombol Navigasi Utama -->
+    <div class="controls">
+        <button class="btn btn-outline" id="prev-btn" onclick="navigate(-1)">← Soal Sebelumnya</button>
+        <button class="btn" id="next-btn" onclick="navigate(1)">Soal Berikutnya →</button>
+    </div>
+
+    <!-- Tombol Khusus Review Soal Salah -->
+    <div style="margin-bottom: 16px; text-align: center;">
+        <button class="btn btn-review-wrong" id="review-wrong-btn" onclick="startReviewWrongMode()">⚠️ Tinjau Soal Salah / Belum Dijawab (<span id="wrong-count-badge">0</span>)</button>
+    </div>
+
+    <!-- Bar Kontrol Bawah: Lompat & Reset -->
+    <div class="bottom-bar">
+        <div class="jump-container" id="jump-wrapper">
+            <label for="jump-no" id="jump-label">Lompat ke:</label>
+            <input type="number" id="jump-no" class="jump-input" min="1" placeholder="1">
+            <button class="btn btn-outline" onclick="jumpToQuestion()">Go</button>
+        </div>
+        <button class="btn btn-reset" onclick="resetQuiz()">Ulangi Kuis</button>
+    </div>
+</div>
+
+<!-- Modal Popup Nilai Akhir -->
+<div class="modal-overlay" id="score-modal">
+    <div class="modal-card">
+        <div class="modal-title">Hasil Kuis Anda</div>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Berikut adalah rekapitulasi hasil pengerjaan kuis latihan SSW Peternakan.</p>
+        
+        
+        <div class="modal-score-box">
+            <div>
+                <div class="modal-stat-val" id="modal-correct-score">0</div>
+                <div class="modal-stat-lbl">Benar</div>
+            </div>
+            <div>
+                <div class="modal-stat-val" id="modal-wrong-score" style="color: var(--danger-text);">0</div>
+                <div class="modal-stat-lbl">Salah / Kosong</div>
+            </div>
+            <div>
+                <div class="modal-stat-val" id="modal-percentage" style="color: #10b981;">0%</div>
+                <div class="modal-stat-lbl">Persentase</div>
+            </div>
+        </div>
+
+        <div id="sync-status" class="sync-status"></div>
+    
+
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-outline" style="flex: 1;" onclick="closeModal()">Tutup</button>
+            <button class="btn" style="flex: 1;" onclick="closeModal(); startReviewWrongMode();">Tinjau Soal Salah</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Data Bank Soal (Soal Kuda Menyusui Anaknya dihapus)
+const rawQuizData = [
+  { n: 211, q: "Perangkap dan jaring penghalang pada bangunan kandang digunakan untuk:", o: ["a. Mengontrol penyakit", "b. Mengontrol binatang liar", "c. Mengontrol hama saniter"], a: "b" },
+  { n: 212, q: "Apabila menemukan burung liar mati di dekat kandang ayam, maka segera buang ke tempat sampah umum.", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 213, q: "Bentuk cangkang telur yang rata, bersih, dan utuh standar siap jual:", o: ["a. Cangkang Utuh Bersih (A)", "b. Cangkang Retak Kotor (B)"], a: "a" },
+  { n: 214, q: "Faktor penentu kualitas telur adalah .....", o: ["a. Cangkang telur", "b. Kuning telur", "c. Benar semua"], a: "c" },
+  { n: 215, q: "Sekitar umur berapa rasio bertelur menjelang puncaknya dengan meningkat hingga sekitar 90% setelah pertama bertelur ?", o: ["a. 550 hari", "b. 200 hari", "c. 60 hari"], a: "b" },
+  { n: 216, q: "Pagar pembatas bundar (Chick guard) dipasang untuk", o: ["a. pemberian umpan", "b. mengepung anak ayam dekat sumber pemanas", "c. memudahkan anak ayam minum"], a: "b" },
+  { n: 217, q: "Ventilasi pada pemeliharaan ayam dengan jumlah banyak mudah rusak, sehingga harus hati-hati terhadap penyakit organ pernapasan.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 218, q: "Kotak berbingkai sarang tempat bertelur dan menetasnya lebah dinamakan:", o: ["a. Kotak sarang", "b. Wadah pengumpan", "c. Kotak peneluran"], a: "c" },
+  { n: 219, q: "Warna bulu kuda varietas Thoroughbred cokelat gelap kehitaman (dark chestnut):", o: ["a. Cokelat Terang (A)", "b. Cokelat Pekat / Dark Chestnut (B)", "c. Hitam Pekat (C)"], a: "b" },
+  { n: 222, q: "Pertumbuhan babi bakalan Jepang cepat, bobotnya menjadi 100~110 kg dalam 5~6 bulan", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 223, q: "Anak babi tidak kuat dingin, tapi babi yang sudah dewasa akan menjadi tidak kuat panas.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 224, q: "Susu afkir adalah pakan ternak bubuk untuk babi dewasa, yang banyak diformulasikan dengan susu bubuk skim.", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 225, q: "Dalam menjadikan kompos kotoran babi, yang perlu diperhatikan adalah.....", o: ["a. Pasokan karbondioksida", "b. Penyesuaian cuaca", "c. Penyesuaian kelembapan"], a: "c" },
+  { n: 226, q: "Fase pembuahan untuk sapi perah melahirkan pedet pertama kalinya (melahirkan pertama) adalah", o: ["a. 14~15 bulan", "b. 16~17 bulan", "c. 18~19 bulan"], a: "a" },
+  { n: 227, q: "Sapi perah memiliki suhu tubuh normal", o: ["a. 36°C", "b. 37°C", "c. 38.5°C"], a: "c" },
+  { n: 228, q: "Sapi hibrida blasteran silangan pertama dinamakan:", o: ["a. El", "b. F1", "c. Gl"], a: "b" },
+  { n: 229, q: "Sapi perah varietas Holstein merupakan ternak yang tidak kuat panas.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 230, q: "Kualitas susu sama antara satu sapi perah dengan yang lain", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 231, q: "Anak babi yang baru lahir lemak subkutannya tebal dan fungsi pengaturan suhu tubuhnya belum matang.", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 232, q: "Yang bukan merupakan penyakit pathogen virus adalah", o: ["a. TGE", "b. PRRS", "c. E-Coli"], a: "c" },
+  { n: 233, q: "Setelah melahirkan, estrus tidak akan muncul selama menyusui anak babi.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 234, q: "Bila pakan ternak mengandung banyak lipid berlebih pada pakan ternak, maka mutu daging akan berdampak", o: ["a. Netral", "b. Baik", "c. Buruk"], a: "c" },
+  { n: 235, q: "Pemeriksaan perubahan perilaku dan lender genitalia pada sapi betina bertujuan untuk:", o: ["a. Pengecekan kesehatan", "b. Pengecekan estrus"], a: "b" },
+  { n: 236, q: "Varietas spesies ayam petelur paling umum yang dipelihara di Jepang berbulu putih (White Leghorn):", o: ["a. White Leghorn (A)", "b. Rhode Island Red (B)"], a: "a" },
+  { n: 237, q: "Sereal jagung disebut juga dengan mylo pada pakan ternak campuran broiler sebagai sumber energi.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 238, q: "Pemotongan paruh dengan alat debeaker dilakukan saat anak ayam berumur", o: ["a. 3~4 minggu", "b. 2~3 minggu", "c. 1~2 minggu"], a: "c" },
+  { n: 239, q: "Suhu tubuh ayam dewasa yang sehat adalah sekitar", o: ["a. 38°C", "b. 41°C", "c. 43°C"], a: "b" },
+  { n: 240, q: "Kualitas telur ayam ditentukan oleh kondisi cangkang, kuning telur, putih telur.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 241, q: "Berikut ini yang bukan merupakan penyakit lebah adalah", o: ["a. Penyakit busuk", "b. Penyakit Varroa", "c. Penyakit flu"], a: "c" },
+  { n: 242, q: "Wadah pengumpan pada sarang lebah berfungsi untuk", o: ["a. Mengumpulkan koloni lebah", "b. Memberi pakan kepada lebah", "c. Menyimpan madu lebah"], a: "b" },
+  { n: 243, q: "Royal jelly yang diberikan pada lebah ratu dihasilkan dari lebah ratu yang memakan serbuk sari.", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 244, q: "Lebah memiliki 3 kastaisasi / karakteristik anggota kasta, antara lain", o: ["a. Lebah pekerja, lebah ratu, lebah pejantan", "b. Lebah pekerja, lebah ratu, lebah raja", "c. Lebah muda, lebah ratu, lebah pejantan"], a: "a" },
+  { n: 246, q: "Thoroughbred adalah varietas yang silsilahnya dikelola dengan ketat berdasarkan pendaftaran silsilah.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 247, q: "Ketinggian putih telur pekat dan berat telur ditetapkan angka Haugh Unit.", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 248, q: "Metode pemberian pakan dengan kondisi telah diremas, campuran pakan ternak dengan air disebut juga dengan dry feeding.", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 249, q: "Bakteri penyebab mastitis yang sulit disembuhkan bila berkembangbiak di dalam ambing adalah", o: ["a. Umpan", "b. Pengumpanan", "c. Staphylococcus aureus"], a: "c" },
+  { n: 250, q: "Kondisi ternak yang tersakiti secara mental karena penderitaan / rasa tertekan dinamakan:", o: ["a. Lapar", "b. Haus", "c. Stres"], a: "c" },
+  { n: 251, q: "Memberi pakan ternak pada ternak dinamakan dengan", o: ["a. Pengumpanan", "b. Umpan", "c. Staphylococcus"], a: "a" },
+  { n: 252, q: "Ternak hanya makan yang disukainya saja dari dalam pakan ternak di wadah pakan, dan menyisakan pakan yang tidak disukainya. Disebut juga dengan ......", o: ["a. Staphylococcus", "b. Aureus", "c. Selective feeding"], a: "c" },
+  { n: 253, q: "Pakan ternak yang tidak mengandung kelembaban disebut dengan", o: ["a. Bahan cair", "b. Bahan basah", "c. Bahan kering"], a: "c" },
+  { n: 254, q: "Metode pembuatan babi blaster dari 3 varietas. Babi yang dibuat dengan mengawinkan jantan varietas ketiga pada babi indukan dua silangan dinamakan babi tiga silangan.", o: ["a. Salah", "b. Benar"], a: "b" },
+  { n: 255, q: "Penyakit patogen virus antara lain TGE (Transmissible Gastro Enteritis), dan PRRS (Porcine Reproductive and Respiratory Syndrom)", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 256, q: "Penyakit patogen virus antara lain mycoplasma, E-Coli, dan streptococcus", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 257, q: "Penyakit pathogen bakteri antara lain mycoplasma, E-Coli, dan streptococcus", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 258, q: "Penyakit pathogen bakteri antara lain TGE (Transmissible Gastro Enteritis), dan PRRS (Porcine Reproductive and Respiratory Syndrom)", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 259, q: "Agar tidak tersisa mikroorganisme patogen, serangga sanitasi, zat anti bakteri, dan sebagainya pada kandang ayam, maka ditegaskan mengenai pembuangan kotoran, pembersihan, pencucian, dan disinfeksi", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 260, q: "Karena pengaruh buruk lingkungan atau kurang nutrisi, maka ayam yang dipelihara secara berkelompok saling mematuk. Kadang saling membunuh dinamakan dengan", o: ["a. Mutualisme", "b. Parasitisme", "c. Kanibalisme"], a: "c" },
+  { n: 261, q: "Terdapat 5 varietas kuda tipe ringan, yaitu varietas Thoroughbred, varietas Thorough, varietas Arab, varietas Anglo Arab, dan varietas Arab-Related", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 262, q: "Varietas yang silsilahnya dikelola dengan ketat berdasarkan pendaftaran silsilah disebut dengan", o: ["a. Hokkaido", "b. Anglo Arab", "c. Thoroughbred"], a: "c" },
+  { n: 263, q: "Lebah ratu dibesarkan dengan diberikan hanya royal jelly selama masa larva, di dalam sarang lebah khusus yang disebut dengan", o: ["a. sel (ruang) calon mantu", "b. sel (ruang) calon mertua", "c. sel (ruang) calon ratu"], a: "c" },
+  { n: 264, q: "Pertumbuhan anak ayam dibagi menjadi 4 urutan, yaitu anak ayam kecil, anak ayam sedang, anak ayam besar, dan ayam dewasa", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 265, q: "Kualitas susu sapi perah adalah sama untuk sapi mana pun juga", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 266, q: "Induk babi yang telah melahirkan akan dipelihara bersama anak babinya selama 2 bulan", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 267, q: "Karena penyakit pada peternakan babi di Jepang itu sedikit, maka tidak diperlukan penyuntikan vaksin", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 268, q: "Bobot broiler pada 7 minggu pada ayam jantan adalah sekitar 5 kg", o: ["a. Benar", "b. Salah"], a: "b" },
+  { n: 269, q: "Perlahirnya lebah pejantan adalah pada periode kawin lebah ratu (di Jepang waktu optimal adalah bulan April hingga Juni)", o: ["a. Benar", "b. Salah"], a: "a" },
+  { n: 270, q: "Beberapa hari sebelum lahirnya lebah ratu yang baru di selktr / di sel calon ratu, lebah ratu yang lama akan keluar dari sarang bersama dengan sekitar setengah lebah pekerja untuk membuat sarang baru (swarming)", o: ["a. Benar", "b. Salah"], a: "a" }
+];
+
+const quizData = rawQuizData.map((item, index) => ({
+    ...item,
+    displayNo: index + 1
+}));
+
+// Inisialisasi State Aplikasi
+let currentIndex = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+let isReviewWrongMode = false;
+let wrongOrUnansweredIndicesList = [];
+let reviewCurrentIdx = 0;
+
+// Muat data dari LocalStorage jika ada
+function loadSavedState() {
+    const savedAnswers = localStorage.getItem('ssw_quiz_answers');
+    const savedIndex = localStorage.getItem('ssw_quiz_index');
+    
+    if (savedAnswers) {
+        userAnswers = JSON.parse(savedAnswers);
+    }
+    if (savedIndex !== null) {
+        currentIndex = parseInt(savedIndex, 10);
+    }
+}
+
+// Simpan data ke LocalStorage
+function saveState() {
+    localStorage.setItem('ssw_quiz_answers', JSON.stringify(userAnswers));
+    localStorage.setItem('ssw_quiz_index', currentIndex);
+}
+
+// Update Statistik & Progress Bar
+function updateStats() {
+    const total = quizData.length;
+    let answeredCount = 0;
+    let scoreCount = 0;
+    let wrongOrUnansweredCount = 0;
+
+    userAnswers.forEach((ans, idx) => {
+        if (ans !== null) {
+            answeredCount++;
+            if (ans === quizData[idx].a.toLowerCase()) {
+                scoreCount++;
+            } else {
+                wrongOrUnansweredCount++;
+            }
+        } else {
+            wrongOrUnansweredCount++; // Dianggap perlu ditinjau jika belum dijawab
+        }
+    });
+
+    const percent = Math.round((answeredCount / total) * 100);
+
+    document.getElementById('answered-count').innerText = answeredCount;
+    document.getElementById('score').innerText = scoreCount;
+    document.getElementById('progress-percent').innerText = `${percent}%`;
+    document.getElementById('progress-fill').style.width = `${percent}%`;
+
+    // Tombol review soal salah/kosong
+    const reviewBtn = document.getElementById('review-wrong-btn');
+    const wrongBadge = document.getElementById('wrong-count-badge');
+    
+    if (wrongOrUnansweredCount > 0) {
+        wrongBadge.innerText = wrongOrUnansweredCount;
+        reviewBtn.style.display = 'inline-block';
+    } else {
+        reviewBtn.style.display = 'none';
+    }
+}
+
+// Tampilkan Soal Sesuai Index
+function loadQuestion() {
+    let activeIndex = currentIndex;
+
+    if (isReviewWrongMode) {
+        activeIndex = wrongOrUnansweredIndicesList[reviewCurrentIdx];
+        document.getElementById('current-no').innerText = `${reviewCurrentIdx + 1} (Dari ${wrongOrUnansweredIndicesList.length} Soal Tinjauan)`;
+    } else {
+        document.getElementById('current-no').innerText = quizData[activeIndex].displayNo;
+    }
+
+    const item = quizData[activeIndex];
+    document.getElementById('question-text').innerText = `${item.displayNo}. ${item.q}`;
+
+    const optionsBox = document.getElementById('options-box');
+    optionsBox.innerHTML = '';
+
+    const feedbackBox = document.getElementById('feedback-box');
+    feedbackBox.style.display = 'none';
+
+    item.o.forEach((optionText) => {
+        const optionKey = optionText.trim().charAt(0).toLowerCase();
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = optionText;
+        
+        if (userAnswers[activeIndex] !== null) {
+            btn.disabled = true;
+            if (optionKey === item.a.toLowerCase()) {
+                btn.classList.add('correct');
+            }
+            if (userAnswers[activeIndex] === optionKey && optionKey !== item.a.toLowerCase()) {
+                btn.classList.add('incorrect');
+            }
+        } else {
+            btn.onclick = () => selectAnswer(optionKey, item.a.toLowerCase(), activeIndex);
+        }
+        
+        optionsBox.appendChild(btn);
+    });
+
+    if (userAnswers[activeIndex] !== null) {
+        feedbackBox.style.display = 'block';
+        if (userAnswers[activeIndex] === item.a.toLowerCase()) {
+            feedbackBox.className = 'feedback correct';
+            feedbackBox.innerText = isReviewWrongMode ? 'Jawaban Anda Benar Sekarang!' : 'Jawaban Anda Benar!';
+        } else {
+            feedbackBox.className = 'feedback incorrect';
+            feedbackBox.innerText = `Jawaban Anda Salah. Jawaban Benar: (${item.a.toUpperCase()})`;
+        }
+    } else {
+        // Jika belum dijawab di mode review
+        if (isReviewWrongMode) {
+            feedbackBox.style.display = 'block';
+            feedbackBox.className = 'feedback incorrect';
+            feedbackBox.innerText = '⚠️ Belum dijawab';
+        }
+    }
+
+    if (isReviewWrongMode) {
+        document.getElementById('prev-btn').disabled = reviewCurrentIdx === 0;
+        document.getElementById('next-btn').disabled = reviewCurrentIdx === wrongOrUnansweredIndicesList.length - 1;
+    } else {
+        document.getElementById('prev-btn').disabled = currentIndex === 0;
+        document.getElementById('next-btn').disabled = currentIndex === quizData.length - 1;
+    }
+
+    updateStats();
+    if (!isReviewWrongMode) {
+        saveState();
+    }
+}
+
+// Memilih Jawaban
+function selectAnswer(selectedKey, correctKey, activeIndex) {
+    userAnswers[activeIndex] = selectedKey;
+    loadQuestion();
+}
+
+// Navigasi Maju/Mundur
+function navigate(direction) {
+    if (isReviewWrongMode) {
+        reviewCurrentIdx += direction;
+        if (reviewCurrentIdx < 0) reviewCurrentIdx = 0;
+        if (reviewCurrentIdx >= wrongOrUnansweredIndicesList.length) reviewCurrentIdx = wrongOrUnansweredIndicesList.length - 1;
+    } else {
+        currentIndex += direction;
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex >= quizData.length) currentIndex = quizData.length - 1;
+    }
+    loadQuestion();
+}
+
+// Lompat ke Nomor Tertentu
+function jumpToQuestion() {
+    if (isReviewWrongMode) return;
+    const val = parseInt(document.getElementById('jump-no').value);
+    if (val >= 1 && val <= quizData.length) {
+        currentIndex = val - 1;
+        loadQuestion();
+    } else {
+        alert(`Masukkan nomor soal antara 1 sampai ${quizData.length}.`);
+    }
+}
+
+// Tampilkan Modal Nilai Akhir
+function showFinalScoreModal() {
+    let scoreCount = 0;
+    let wrongOrUnansweredCount = 0;
+
+    userAnswers.forEach((ans, idx) => {
+        if (ans !== null) {
+            if (ans === quizData[idx].a.toLowerCase()) {
+                scoreCount++;
+            } else {
+                wrongOrUnansweredCount++;
+            }
+        } else {
+            wrongOrUnansweredCount++;
+        }
+    });
+
+    const total = quizData.length;
+    const percent = Math.round((scoreCount / total) * 100);
+
+    document.getElementById('modal-correct-score').innerText = scoreCount;
+    document.getElementById('modal-wrong-score').innerText = wrongOrUnansweredCount;
+    document.getElementById('modal-percentage').innerText = `${percent}%`;
+
+    document.getElementById('score-modal').style.display = 'flex';
+}
+
+// Tutup Modal Nilai Akhir
+function closeModal() {
+    document.getElementById('score-modal').style.display = 'none';
+}
+
+// Memulai Mode Review Soal Salah / Belum Dijawab
+function startReviewWrongMode() {
+    wrongOrUnansweredIndicesList = [];
+    userAnswers.forEach((ans, idx) => {
+        if (ans === null || ans !== quizData[idx].a.toLowerCase()) {
+            wrongOrUnansweredIndicesList.push(idx);
+        }
+    });
+
+    if (wrongOrUnansweredIndicesList.length === 0) {
+        alert("Semua soal sudah dijawab dengan benar! Kerja bagus!");
+        return;
+    }
+
+    isReviewWrongMode = true;
+    reviewCurrentIdx = 0;
+
+    document.getElementById('review-banner').classList.add('active');
+    document.getElementById('jump-wrapper').style.display = 'none';
+    document.getElementById('progress-label').innerText = 'Progres Sesi Review';
+
+    loadQuestion();
+}
+
+// Keluar dari Mode Review
+function exitReviewMode() {
+    isReviewWrongMode = false;
+    document.getElementById('review-banner').classList.remove('active');
+    document.getElementById('jump-wrapper').style.display = 'flex';
+    document.getElementById('progress-label').innerText = 'Progres Pengerjaan';
+    loadQuestion();
+}
+
+// Reset Kuis / Ulang dari Awal
+function resetQuiz() {
+    if (confirm("Apakah Anda yakin ingin mengulang kuis dari awal? Semua jawaban Anda akan dihapus.")) {
+        userAnswers = new Array(quizData.length).fill(null);
+        currentIndex = 0;
+        isReviewWrongMode = false;
+        document.getElementById('review-banner').classList.remove('active');
+        document.getElementById('jump-wrapper').style.display = 'flex';
+        document.getElementById('progress-label').innerText = 'Progres Pengerjaan';
+        localStorage.removeItem('ssw_quiz_answers');
+        localStorage.removeItem('ssw_quiz_index');
+        loadQuestion();
+    }
+}
+
+// Inisialisasi Pertama
+document.getElementById('total-count').innerText = quizData.length;
+document.getElementById('total-subtitle').innerText = `Kumpulan Soal ASAT Dokkai (Total Soal: ${quizData.length})`;
+const jumpInput = document.getElementById('jump-no');
+jumpInput.max = quizData.length;
+jumpInput.placeholder = `1-${quizData.length}`;
+
+loadSavedState();
+
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxKQZNJDGUyOCRjjHE_lY6X3U2f8KaFB5uNrH5ZDsZhDPx1BRdvR6OZSOvocUO2Vq-1Q/exec";
+const STORAGE_PREFIX = "latihan-210-270-ssw-peternakan-spreadsheet.html";
+
+function saveIdentity() {
+    localStorage.setItem('ssw_name_' + STORAGE_PREFIX, document.getElementById('participant-name').value);
+    localStorage.setItem('ssw_batch_' + STORAGE_PREFIX, document.getElementById('participant-batch').value);
+}
+
+// Override showFinalScoreModal
+function showFinalScoreModal() {
+    const nameInput = document.getElementById('participant-name');
+    const name = nameInput.value.trim();
+    if (!name) {
+        alert("Mohon isi 'Nama Lengkap Peserta' terlebih dahulu di bagian atas sebelum melihat nilai & mengirim hasil!");
+        nameInput.focus();
+        return;
+    }
+
+    let scoreCount = 0;
+    let wrongOrUnansweredCount = 0;
+
+    userAnswers.forEach((ans, idx) => {
+        if (ans !== null) {
+            if (ans === quizData[idx].a.toLowerCase()) {
+                scoreCount++;
+            } else {
+                wrongOrUnansweredCount++;
+            }
+        } else {
+            wrongOrUnansweredCount++;
+        }
+    });
+
+    const total = quizData.length;
+    const percent = Math.round((scoreCount / total) * 100);
+
+    document.getElementById('modal-correct-score').innerText = scoreCount;
+    document.getElementById('modal-wrong-score').innerText = wrongOrUnansweredCount;
+    document.getElementById('modal-percentage').innerText = percent + '%';
+
+    document.getElementById('score-modal').style.display = 'flex';
+    sendScoreToGoogleSheets(scoreCount, wrongOrUnansweredCount, percent);
+}
+
+async function sendScoreToGoogleSheets(scoreCount, wrongOrUnansweredCount, percent) {
+    const statusBox = document.getElementById('sync-status');
+    const name = document.getElementById('participant-name').value.trim();
+    const batch = document.getElementById('participant-batch').value.trim() || "-";
+
+    statusBox.className = 'sync-status loading';
+    statusBox.innerText = '⏳ Sedang mengirim hasil nilai ke Google Spreadsheet...';
+
+    const payload = {
+        timestamp: new Date().toLocaleString('id-ID'),
+        nama: name,
+        kelas: batch,
+        total_soal: quizData.length,
+        terjawab: scoreCount + wrongOrUnansweredCount,
+        benar: scoreCount,
+        salah_kosong: wrongOrUnansweredCount,
+        nilai: percent + '%',
+        modul: "Latihan Soal SSW Peternakan (Soal 210-270)"
+    };
+
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        statusBox.className = 'sync-status success';
+        statusBox.innerText = '✅ Hasil tes berhasil dikirim ke Google Spreadsheet!';
+    } catch (error) {
+        console.error('Error:', error);
+        statusBox.className = 'sync-status error';
+        statusBox.innerText = '❌ Gagal mengirim data secara otomatis. Coba periksa koneksi internet.';
+    }
+}
+
+// Load identity on startup
+window.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('ssw_name_' + STORAGE_PREFIX);
+    const savedBatch = localStorage.getItem('ssw_batch_' + STORAGE_PREFIX);
+    if (savedName) document.getElementById('participant-name').value = savedName;
+    if (savedBatch) document.getElementById('participant-batch').value = savedBatch;
+});
+    
+loadQuestion();
+</script>
+
+</body>
+</html>
